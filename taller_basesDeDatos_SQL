@@ -1,0 +1,715 @@
+--
+-- PostgreSQL database dump
+--
+
+\restrict SSyFu4FaMWpQOKbydikZOUKqrhy9Otv9THuoBYYG405p7UIvvnhIU2Pv1QVwF6t
+
+-- Dumped from database version 18.6
+-- Dumped by pg_dump version 18.6
+
+-- Started on 2026-11-19 23:42:49
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 228 (class 1259 OID 16830)
+-- Name: clases_grupales; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.clases_grupales (
+    id integer NOT NULL,
+    nombre character varying(80) NOT NULL,
+    dia_semana character varying(20) NOT NULL,
+    hora time without time zone NOT NULL,
+    cupo integer NOT NULL,
+    id_entrenador integer NOT NULL,
+    CONSTRAINT clases_grupales_cupo_check CHECK ((cupo > 0))
+);
+
+
+ALTER TABLE public.clases_grupales OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 16829)
+-- Name: clases_grupales_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.clases_grupales_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.clases_grupales_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5095 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: clases_grupales_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.clases_grupales_id_seq OWNED BY public.clases_grupales.id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 16817)
+-- Name: entrenadores; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.entrenadores (
+    id integer NOT NULL,
+    nombre character varying(100) NOT NULL,
+    especialidad character varying(60) NOT NULL,
+    correo character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.entrenadores OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 16816)
+-- Name: entrenadores_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.entrenadores_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.entrenadores_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5096 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: entrenadores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.entrenadores_id_seq OWNED BY public.entrenadores.id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 16795)
+-- Name: ficha_medica; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ficha_medica (
+    id integer NOT NULL,
+    peso numeric(5,2) NOT NULL,
+    estatura numeric(4,2) NOT NULL,
+    lesiones text,
+    documento_socio integer NOT NULL,
+    CONSTRAINT ficha_medica_estatura_check CHECK ((estatura > (0)::numeric)),
+    CONSTRAINT ficha_medica_peso_check CHECK ((peso > (0)::numeric))
+);
+
+
+ALTER TABLE public.ficha_medica OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 16794)
+-- Name: ficha_medica_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ficha_medica_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.ficha_medica_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5097 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: ficha_medica_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ficha_medica_id_seq OWNED BY public.ficha_medica.id;
+
+
+--
+-- TOC entry 232 (class 1259 OID 16872)
+-- Name: inscripciones; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.inscripciones (
+    id integer NOT NULL,
+    fecha_inscripcion date NOT NULL,
+    documento_socio integer NOT NULL,
+    id_clase integer NOT NULL
+);
+
+
+ALTER TABLE public.inscripciones OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 16871)
+-- Name: inscripciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.inscripciones_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.inscripciones_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5098 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: inscripciones_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.inscripciones_id_seq OWNED BY public.inscripciones.id;
+
+
+--
+-- TOC entry 230 (class 1259 OID 16849)
+-- Name: membresias; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.membresias (
+    id integer NOT NULL,
+    fecha_inicio date NOT NULL,
+    fecha_fin date NOT NULL,
+    documento_socio integer NOT NULL,
+    id_plan integer NOT NULL,
+    CONSTRAINT chk_fechas_membresia CHECK ((fecha_fin >= fecha_inicio))
+);
+
+
+ALTER TABLE public.membresias OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 16848)
+-- Name: membresias_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.membresias_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.membresias_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5099 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: membresias_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.membresias_id_seq OWNED BY public.membresias.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 16767)
+-- Name: planes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.planes (
+    id integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    duracion_meses integer NOT NULL,
+    precio numeric(10,2) NOT NULL,
+    CONSTRAINT planes_duracion_meses_check CHECK ((duracion_meses > 0)),
+    CONSTRAINT planes_precio_check CHECK ((precio > (0)::numeric))
+);
+
+
+ALTER TABLE public.planes OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16766)
+-- Name: planes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.planes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.planes_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5100 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: planes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.planes_id_seq OWNED BY public.planes.id;
+
+
+--
+-- TOC entry 222 (class 1259 OID 16782)
+-- Name: socios; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.socios (
+    id integer NOT NULL,
+    documento integer NOT NULL,
+    nombre character varying(100) NOT NULL,
+    telefono character varying(20) NOT NULL,
+    correo character varying(100)
+);
+
+
+ALTER TABLE public.socios OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 16781)
+-- Name: socios_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.socios_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.socios_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5101 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: socios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.socios_id_seq OWNED BY public.socios.id;
+
+
+--
+-- TOC entry 4890 (class 2604 OID 16833)
+-- Name: clases_grupales id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clases_grupales ALTER COLUMN id SET DEFAULT nextval('public.clases_grupales_id_seq'::regclass);
+
+
+--
+-- TOC entry 4889 (class 2604 OID 16820)
+-- Name: entrenadores id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.entrenadores ALTER COLUMN id SET DEFAULT nextval('public.entrenadores_id_seq'::regclass);
+
+
+--
+-- TOC entry 4888 (class 2604 OID 16798)
+-- Name: ficha_medica id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ficha_medica ALTER COLUMN id SET DEFAULT nextval('public.ficha_medica_id_seq'::regclass);
+
+
+--
+-- TOC entry 4892 (class 2604 OID 16875)
+-- Name: inscripciones id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inscripciones ALTER COLUMN id SET DEFAULT nextval('public.inscripciones_id_seq'::regclass);
+
+
+--
+-- TOC entry 4891 (class 2604 OID 16852)
+-- Name: membresias id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membresias ALTER COLUMN id SET DEFAULT nextval('public.membresias_id_seq'::regclass);
+
+
+--
+-- TOC entry 4886 (class 2604 OID 16770)
+-- Name: planes id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.planes ALTER COLUMN id SET DEFAULT nextval('public.planes_id_seq'::regclass);
+
+
+--
+-- TOC entry 4887 (class 2604 OID 16785)
+-- Name: socios id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.socios ALTER COLUMN id SET DEFAULT nextval('public.socios_id_seq'::regclass);
+
+
+--
+-- TOC entry 5085 (class 0 OID 16830)
+-- Dependencies: 228
+-- Data for Name: clases_grupales; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.clases_grupales (id, nombre, dia_semana, hora, cupo, id_entrenador) FROM stdin;
+1	Spinning	Lunes	06:00:00	2	1
+2	Yoga Basico	Martes	08:00:00	4	2
+3	Funcional	Miercoles	18:00:00	3	1
+4	Yoga Avanzado	Viernes	17:00:00	5	2
+\.
+
+
+--
+-- TOC entry 5083 (class 0 OID 16817)
+-- Dependencies: 226
+-- Data for Name: entrenadores; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.entrenadores (id, nombre, especialidad, correo) FROM stdin;
+1	Andres Lopez	Calistenia	andres@gym.com
+2	Paula Rojas	Yoga	paula@gym.com
+3	Miguel Diaz	Funcional	miguel@gym.com
+\.
+
+
+--
+-- TOC entry 5081 (class 0 OID 16795)
+-- Dependencies: 224
+-- Data for Name: ficha_medica; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ficha_medica (id, peso, estatura, lesiones, documento_socio) FROM stdin;
+1	72.00	1.75	Ninguna	1001
+2	68.00	1.68	Lesion de rodilla	1002
+3	85.00	1.82	Dolor lumbar	1004
+4	60.00	1.60	Esguince de tobillo	1005
+\.
+
+
+--
+-- TOC entry 5089 (class 0 OID 16872)
+-- Dependencies: 232
+-- Data for Name: inscripciones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.inscripciones (id, fecha_inscripcion, documento_socio, id_clase) FROM stdin;
+1	2026-01-10	1001	1
+2	2026-01-11	1002	1
+3	2026-01-12	1001	2
+4	2026-01-13	1003	2
+5	2026-01-14	1004	2
+6	2026-01-15	1002	3
+7	2026-01-16	1003	3
+8	2026-01-17	1005	3
+9	2026-01-18	1004	4
+10	2026-01-19	1005	4
+\.
+
+
+--
+-- TOC entry 5087 (class 0 OID 16849)
+-- Dependencies: 230
+-- Data for Name: membresias; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.membresias (id, fecha_inicio, fecha_fin, documento_socio, id_plan) FROM stdin;
+1	2025-01-01	2025-02-01	1001	1
+2	2025-02-02	2025-03-02	1001	1
+3	2026-01-01	2026-04-01	1002	2
+4	2025-05-01	2026-05-01	1003	3
+5	2026-02-01	2026-03-01	1004	1
+6	2026-02-01	2026-03-01	1004	1
+7	2026-06-01	2026-09-01	1005	2
+8	2026-07-01	2027-07-01	1006	3
+\.
+
+
+--
+-- TOC entry 5077 (class 0 OID 16767)
+-- Dependencies: 220
+-- Data for Name: planes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.planes (id, nombre, duracion_meses, precio) FROM stdin;
+1	Mensual	1	100000.00
+2	Trimestral	3	280000.00
+3	Anual	12	1000000.00
+\.
+
+
+--
+-- TOC entry 5079 (class 0 OID 16782)
+-- Dependencies: 222
+-- Data for Name: socios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.socios (id, documento, nombre, telefono, correo) FROM stdin;
+1	1001	Juan Perez	3001111111	juan@gmail.com
+2	1002	Ana Gomez	3002222222	ana@gmail.com
+3	1003	Carlos Ruiz	3003333333	carlos@gmail.com
+4	1004	Maria Torres	3004444444	maria@gmail.com
+5	1005	Pedro Sanchez	3005555555	pedro@gmail.com
+6	1006	Laura Jimenez	3006666666	\N
+\.
+
+
+--
+-- TOC entry 5102 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: clases_grupales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.clases_grupales_id_seq', 4, true);
+
+
+--
+-- TOC entry 5103 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: entrenadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.entrenadores_id_seq', 3, true);
+
+
+--
+-- TOC entry 5104 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: ficha_medica_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.ficha_medica_id_seq', 4, true);
+
+
+--
+-- TOC entry 5105 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: inscripciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.inscripciones_id_seq', 10, true);
+
+
+--
+-- TOC entry 5106 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: membresias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.membresias_id_seq', 8, true);
+
+
+--
+-- TOC entry 5107 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: planes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.planes_id_seq', 3, true);
+
+
+--
+-- TOC entry 5108 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: socios_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.socios_id_seq', 6, true);
+
+
+--
+-- TOC entry 4916 (class 2606 OID 16842)
+-- Name: clases_grupales clases_grupales_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clases_grupales
+    ADD CONSTRAINT clases_grupales_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4912 (class 2606 OID 16828)
+-- Name: entrenadores entrenadores_correo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.entrenadores
+    ADD CONSTRAINT entrenadores_correo_key UNIQUE (correo);
+
+
+--
+-- TOC entry 4914 (class 2606 OID 16826)
+-- Name: entrenadores entrenadores_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.entrenadores
+    ADD CONSTRAINT entrenadores_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4908 (class 2606 OID 16810)
+-- Name: ficha_medica ficha_medica_documento_socio_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ficha_medica
+    ADD CONSTRAINT ficha_medica_documento_socio_key UNIQUE (documento_socio);
+
+
+--
+-- TOC entry 4910 (class 2606 OID 16808)
+-- Name: ficha_medica ficha_medica_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ficha_medica
+    ADD CONSTRAINT ficha_medica_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4920 (class 2606 OID 16881)
+-- Name: inscripciones inscripciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inscripciones
+    ADD CONSTRAINT inscripciones_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4918 (class 2606 OID 16860)
+-- Name: membresias membresias_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membresias
+    ADD CONSTRAINT membresias_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4900 (class 2606 OID 16780)
+-- Name: planes planes_nombre_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.planes
+    ADD CONSTRAINT planes_nombre_key UNIQUE (nombre);
+
+
+--
+-- TOC entry 4902 (class 2606 OID 16778)
+-- Name: planes planes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.planes
+    ADD CONSTRAINT planes_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4904 (class 2606 OID 16793)
+-- Name: socios socios_documento_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.socios
+    ADD CONSTRAINT socios_documento_key UNIQUE (documento);
+
+
+--
+-- TOC entry 4906 (class 2606 OID 16791)
+-- Name: socios socios_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.socios
+    ADD CONSTRAINT socios_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4922 (class 2606 OID 16883)
+-- Name: inscripciones uq_inscripcion_unica; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inscripciones
+    ADD CONSTRAINT uq_inscripcion_unica UNIQUE (documento_socio, id_clase);
+
+
+--
+-- TOC entry 4924 (class 2606 OID 16843)
+-- Name: clases_grupales fk_clase_entrenador; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clases_grupales
+    ADD CONSTRAINT fk_clase_entrenador FOREIGN KEY (id_entrenador) REFERENCES public.entrenadores(id);
+
+
+--
+-- TOC entry 4923 (class 2606 OID 16811)
+-- Name: ficha_medica fk_ficha_socio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ficha_medica
+    ADD CONSTRAINT fk_ficha_socio FOREIGN KEY (documento_socio) REFERENCES public.socios(documento);
+
+
+--
+-- TOC entry 4927 (class 2606 OID 16889)
+-- Name: inscripciones fk_inscripcion_clase; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inscripciones
+    ADD CONSTRAINT fk_inscripcion_clase FOREIGN KEY (id_clase) REFERENCES public.clases_grupales(id);
+
+
+--
+-- TOC entry 4928 (class 2606 OID 16884)
+-- Name: inscripciones fk_inscripcion_socio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.inscripciones
+    ADD CONSTRAINT fk_inscripcion_socio FOREIGN KEY (documento_socio) REFERENCES public.socios(documento);
+
+
+--
+-- TOC entry 4925 (class 2606 OID 16866)
+-- Name: membresias fk_membresia_plan; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membresias
+    ADD CONSTRAINT fk_membresia_plan FOREIGN KEY (id_plan) REFERENCES public.planes(id);
+
+
+--
+-- TOC entry 4926 (class 2606 OID 16861)
+-- Name: membresias fk_membresia_socio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membresias
+    ADD CONSTRAINT fk_membresia_socio FOREIGN KEY (documento_socio) REFERENCES public.socios(documento);
+
+
+-- Completed on 2026-11-19 23:42:51
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict SSyFu4FaMWpQOKbydikZOUKqrhy9Otv9THuoBYYG405p7UIvvnhIU2Pv1QVwF6t
+
